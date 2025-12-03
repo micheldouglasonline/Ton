@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Ton Master: Jogo de Vendas e Maquininhas | Domine o Terminal</title>
+    <meta name="title" content="Ton Master: Jogo de Vendas e Maquininhas | Domine o Terminal">
+    <meta name="description" content="Simulador de vendas e estratégia para empreendedores. Aprenda a usar maquininhas de cartão, gerencie taxas, aumente seu lucro e domine o ecossistema Ton. Jogue agora!">
+    <meta name="author" content="Michel Douglas Online">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Portuguese">
+    <meta name="revisit-after" content="7 days">
+    <meta name="theme-color" content="#00dd00">
+
+    <!-- 100+ SEO Keywords -->
+    <meta name="keywords" content="maquininha ton, maquininha stone, ton t3, ton t2, ton t1, ton t1 chip, ton brother, ton básico, mega ton, giga ton, black ton, taxas ton, menores taxas, calculadora de taxas, simulador ton, comprar maquininha, vender com cartão, máquina de cartão, maquininha de cartão, maquininha sem aluguel, maquininha barata, melhor maquininha 2024, maquininha com chip, maquininha wifi, maquininha bluetooth, maquininha android, maquininha nfc, pagamento por aproximação, link de pagamento, pix, qr code, receber na hora, antecipação de recebíveis, renda extra, empreendedorismo, mei, microempreendedor individual, cnpj, cpf, autônomo, vendedor autônomo, loja virtual, e-commerce, vendas online, gestão financeira, fluxo de caixa, lucro, faturamento, como vender mais, estratégias de vendas, marketing digital, michel douglas online, revendedor ton, consultor ton, cupom de desconto ton, promo ton, desconto ton, frete grátis ton, garantia ilimitada, suporte ton, app ton, conta digital ton, cartão pré-pago, pagseguro, mercado pago, infinitepay, sumup, cielo, getnet, rede, safrapay, comparativo maquininhas, negócio próprio, franquia barata, trabalhar em casa, renda passiva, dinheiro rápido, sistema de vendas, frente de caixa, automação comercial, varejo, atacado, restaurante, delivery, ifood, uber eats, motorista de app, taxista, entregador, salão de beleza, estética, manicure, pedicure, cabeleireiro, barbearia, pet shop, oficina mecânica, prestador de serviços, tecnologia de pagamento, fintech, inovação, maquininha verde, maquininha do bbb, stone pagamentos, ton solutions, educação financeira, jogo de vendas, simulador de negócios">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tonmaster.app/">
+    <meta property="og:title" content="Ton Master: O Jogo do Empreendedor">
+    <meta property="og:description" content="Domine o terminal de vendas! Aprenda as melhores taxas, simule transações e cresça seu negócio com o Ton.">
+    <meta property="og:image" content="https://ton.com.br/assets/images/home/hero-home-mobile.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://tonmaster.app/">
+    <meta property="twitter:title" content="Ton Master: O Jogo do Empreendedor">
+    <meta property="twitter:description" content="Domine o terminal de vendas! Aprenda as melhores taxas, simule transações e cresça seu negócio com o Ton.">
+    <meta property="twitter:image" content="https://ton.com.br/assets/images/home/hero-home-mobile.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Ton Master",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "BRL"
+      },
+      "description": "Um jogo educacional de simulação para ensinar empreendedores a maximizar vendas usando maquininhas de cartão.",
+      "author": {
+        "@type": "Person",
+        "name": "Michel Douglas Online"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1250"
+      }
+    }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Nunito', sans-serif;
+      }
+      /* Custom scrollbar for webkit */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #00dd00; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #00bb00; 
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              ton: {
+                DEFAULT: '#00dd00',
+                dark: '#00bb00',
+                light: '#ccffcc',
+                bg: '#f0fdf4'
+              },
+              dark: {
+                bg: '#121212',
+                surface: '#1E1E1E',
+                border: '#333333'
+              }
+            },
+            fontFamily: {
+              sans: ['Nunito', 'sans-serif'],
+            },
+            animation: {
+              'float': 'float 6s ease-in-out infinite',
+              'bounce-short': 'bounce 0.5s infinite',
+              'scale-check': 'scaleCheck 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              },
+              scaleCheck: {
+                '0%': { transform: 'scale(0.8)', opacity: '0' },
+                '100%': { transform: 'scale(1)', opacity: '1' }
+              }
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.5.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-gray-50 dark:bg-dark-bg text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div id="root"></div>
+  </body>
+</html>
