@@ -1,6 +1,6 @@
 import React from 'react';
 import { UserState } from '../../types';
-import { Play, TrendingUp, Users, ShoppingCart, Lock, CreditCard, History, Edit2 } from 'lucide-react';
+import { Play, TrendingUp, Users, ShoppingCart, Lock, CreditCard, History, Edit2, Share2, Megaphone } from 'lucide-react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 interface DashboardProps {
@@ -34,6 +34,26 @@ export const DashboardScreen: React.FC<DashboardProps> = ({ user, setUser, onPla
       hour: '2-digit',
       minute: '2-digit'
     });
+  };
+
+  const handleShare = async (title: string, text: string) => {
+    const shareData = {
+      title: title,
+      text: `${text} Confira no Ton Master!`,
+      url: AFFILIATE_LINK,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.log('Error sharing:', err);
+      }
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      navigator.clipboard.writeText(`${text} ${AFFILIATE_LINK}`);
+      alert("Link copiado para a área de transferência!");
+    }
   };
 
   return (
@@ -124,14 +144,13 @@ export const DashboardScreen: React.FC<DashboardProps> = ({ user, setUser, onPla
 
       </div>
 
-      {/* Challenges Grid */}
+      {/* Challenges & News Grid */}
       <div>
          <div className="flex justify-between items-end mb-6">
             <div>
-               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Desafios Ativos</h2>
-               <p className="text-gray-500 dark:text-gray-400">Complete-os para ganhar recompensas extras.</p>
+               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Desafios & Novidades</h2>
+               <p className="text-gray-500 dark:text-gray-400">Fique por dentro das atualizações do Ton.</p>
             </div>
-            <button className="text-ton font-bold hover:text-green-600">Ver Todos</button>
          </div>
 
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -146,7 +165,7 @@ export const DashboardScreen: React.FC<DashboardProps> = ({ user, setUser, onPla
             />
             
             <ChallengeCard 
-               title="Loucura das Vendas de Feriado"
+               title="Loucura das Vendas"
                desc="Processe devoluções de alto valor e pedidos complexos."
                xp={1500}
                difficulty="Médio"
@@ -154,12 +173,25 @@ export const DashboardScreen: React.FC<DashboardProps> = ({ user, setUser, onPla
                onClick={onPlay}
             />
             
-            <div className="bg-gray-100 dark:bg-dark-surface/50 border border-gray-200 dark:border-dark-border p-6 rounded-2xl flex flex-col items-center justify-center text-center opacity-75">
-               <div className="w-16 h-16 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4 text-gray-400">
-                  <Lock size={32} />
+            {/* News Card with Share Button */}
+            <div className="bg-gray-900 dark:bg-black text-white p-6 rounded-2xl shadow-lg border border-gray-800 flex flex-col justify-between relative overflow-hidden group">
+               <div className="absolute top-0 right-0 p-4 opacity-10 transform rotate-12 group-hover:rotate-0 transition-transform duration-500">
+                  <Megaphone size={100} />
                </div>
-               <h3 className="font-bold text-xl text-gray-500 dark:text-gray-400">Divisão de Conta</h3>
-               <p className="text-gray-400 text-sm mt-2">Chegue ao Nível 20 para desbloquear</p>
+               
+               <div className="relative z-10">
+                   <span className="bg-ton text-xs font-black px-2 py-1 rounded mb-3 inline-block">NOVIDADE</span>
+                   <h3 className="font-bold text-xl mb-2 leading-tight">Ton T3 Smart: Bateria para o dia todo!</h3>
+                   <p className="text-gray-300 text-sm">Aceite Pix, QR Code e aproxime para vender muito mais.</p>
+               </div>
+               
+               <button 
+                  onClick={() => handleShare("Ton T3 Smart", "A maquininha mais completa com bateria para o dia todo e as menores taxas!")}
+                  className="mt-6 flex items-center justify-center gap-2 w-full py-2 rounded-lg bg-white/10 hover:bg-white/20 text-ton font-bold transition-all text-sm border border-white/10"
+               >
+                   <Share2 size={16} />
+                   Compartilhar Novidade
+               </button>
             </div>
 
          </div>

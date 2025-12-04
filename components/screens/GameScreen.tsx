@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Terminal } from '../Terminal';
 import { Customer, Product, UserState } from '../../types';
 import { generateCustomerScenario } from '../../services/gemini';
-import { ArrowLeft, RefreshCw, ShoppingBag, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft, ShoppingBag, CheckCircle, XCircle, TrendingUp, DollarSign } from 'lucide-react';
 
 interface GameScreenProps {
   user: UserState;
@@ -16,6 +16,10 @@ export const GameScreen: React.FC<GameScreenProps> = ({ user, onExit, onWin }) =
   const [selectedItems, setSelectedItems] = useState<Product[]>([]);
   const [feedback, setFeedback] = useState<'success' | 'error' | null>(null);
   const [message, setMessage] = useState("");
+  
+  // Animation states
+  const [isShaking, setIsShaking] = useState(false);
+  const [rewards, setRewards] = useState<{ money: number, xp: number } | null>(null);
 
   const loadNewCustomer = async () => {
     setLoading(true);
@@ -43,14 +47,6 @@ export const GameScreen: React.FC<GameScreenProps> = ({ user, onExit, onWin }) =
     if (!customer) return;
 
     // Logic: The user must select the items the customer wants, THEN charge the correct amount.
-    // 1. Verify items
-    const desiredIds = new Set(customer.desiredItems.map(i => i.name)); // Using name for simpler matching in this demo
-    const selectedIds = new Set(selectedItems.map(i => i.name));
-    
-    // In a real game, you'd match IDs. Here we trust the generative names.
-    // Let's assume for this demo, the user must just match the TOTAL price of the desired items to win.
-    // This simplifies the UI interaction (no need to drag/drop perfectly).
-    
     const correctTotal = customer.desiredItems.reduce((sum, i) => sum + i.price, 0);
     const tolerance = 0.01;
 
@@ -58,12 +54,28 @@ export const GameScreen: React.FC<GameScreenProps> = ({ user, onExit, onWin }) =
       // Success
       setFeedback('success');
       setMessage(`Ótimo trabalho! Pagamento de ${formatCurrency(amount)} aprovado.`);
+      
+      const rewardMoney = amount * 0.2;
+      const rewardXP = 50;
+
+      // Trigger Animations
+      setRewards({ money: rewardMoney, xp: rewardXP });
+      
       // Passing customer name and total amount back to App for history
-      onWin({ money: amount * 0.2, xp: 50 }, customer.name, amount); 
-      setTimeout(loadNewCustomer, 2000);
+      onWin({ money: rewardMoney, xp: rewardXP }, customer.name, amount); 
+      
+      setTimeout(() => {
+        setRewards(null);
+        loadNewCustomer();
+      }, 2500);
     } else {
+      // Failure
       setFeedback('error');
       setMessage(`Pagamento falhou! Esperado ${formatCurrency(correctTotal)}, mas recebido ${formatCurrency(amount)}.`);
+      
+      // Trigger Shake
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
     }
   };
 
@@ -85,7 +97,23 @@ export const GameScreen: React.FC<GameScreenProps> = ({ user, onExit, onWin }) =
   }
 
   return (
-    <div className="h-full flex flex-col lg:flex-row gap-6 max-w-7xl mx-auto">
+    <div className="h-full flex flex-col lg:flex-row gap-6 max-w-7xl mx-auto relative">
+      {/* Rewards Overlay Animation */}
+      {rewards && (
+        <div className="absolute inset-0 z-50 pointer-events-none flex items-center justify-center lg:justify-end lg:pr-32 pb-20">
+           <div className="flex flex-col gap-4 animate-float-up">
+              <div className="flex items-center gap-2 bg-green-500 text-white px-6 py-3 rounded-2xl shadow-xl border-4 border-green-400">
+                 <DollarSign size={32} strokeWidth={3} />
+                 <span className="text-4xl font-black">+{formatCurrency(rewards.money)}</span>
+              </div>
+              <div className="flex items-center gap-2 bg-yellow-400 text-yellow-900 px-6 py-3 rounded-2xl shadow-xl border-4 border-yellow-300">
+                 <TrendingUp size={32} strokeWidth={3} />
+                 <span className="text-4xl font-black">+{rewards.xp} XP</span>
+              </div>
+           </div>
+        </div>
+      )}
+
       {/* Header Mobile */}
       <div className="lg:hidden flex justify-between items-center mb-4">
          <button onClick={onExit} className="flex items-center text-gray-600"><ArrowLeft size={20} className="mr-1" /> Sair</button>
@@ -129,8 +157,6 @@ export const GameScreen: React.FC<GameScreenProps> = ({ user, onExit, onWin }) =
            </div>
            
            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 overflow-y-auto max-h-[400px]">
-              {/* Combine desired items with some random distractors for gameplay challenge */}
-              {/* For this demo, we just show the desired items to keep it simple as a "calculator" game */}
               {customer?.desiredItems.map((item) => {
                  const isSelected = selectedItems.some(i => i.id === item.id);
                  return (
@@ -171,11 +197,11 @@ export const GameScreen: React.FC<GameScreenProps> = ({ user, onExit, onWin }) =
       {/* Right Column: Terminal */}
       <div className="flex-1 lg:max-w-md flex flex-col justify-center relative">
           
-          <div className="mb-4 flex justify-between items-center">
+          <div className="mb-4 flex justify-between items-center h-10">
              <div className="lg:hidden"></div>
              {feedback && (
                 <div className={`
-                   flex items-center gap-2 px-4 py-2 rounded-lg font-bold animate-bounce-short shadow-lg
+                   flex items-center gap-2 px-4 py-2 rounded-lg font-bold animate-bounce-short shadow-lg mx-auto
                    ${feedback === 'success' ? 'bg-ton text-white' : 'bg-red-500 text-white'}
                 `}>
                    {feedback === 'success' ? <CheckCircle size={20} /> : <XCircle size={20} />}
@@ -184,11 +210,13 @@ export const GameScreen: React.FC<GameScreenProps> = ({ user, onExit, onWin }) =
              )}
           </div>
 
-          <Terminal 
-             onConfirm={handleTerminalInput} 
-             expectedAmount={totalAmount}
-             className="w-full max-w-sm mx-auto"
-          />
+          <div className={`${isShaking ? 'animate-shake' : ''} transition-transform`}>
+            <Terminal 
+               onConfirm={handleTerminalInput} 
+               expectedAmount={totalAmount}
+               className="w-full max-w-sm mx-auto"
+            />
+          </div>
 
           <p className="text-center text-gray-400 mt-6 text-sm">
              Digite o valor total mostrado no carrinho e pressione <span className="font-bold text-ton">Confirmar</span>.
