@@ -58,12 +58,13 @@ export const GameScreen: React.FC<GameScreenProps> = ({ user, onExit, onWin }) =
       const rewardMoney = amount * 0.2;
       const rewardXP = 50;
 
-      // Trigger Animations
+      // Trigger Rewards Animation
       setRewards({ money: rewardMoney, xp: rewardXP });
       
-      // Passing customer name and total amount back to App for history
+      // Update Game State
       onWin({ money: rewardMoney, xp: rewardXP }, customer.name, amount); 
       
+      // Wait for animation before next customer
       setTimeout(() => {
         setRewards(null);
         loadNewCustomer();
@@ -73,7 +74,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({ user, onExit, onWin }) =
       setFeedback('error');
       setMessage(`Pagamento falhou! Esperado ${formatCurrency(correctTotal)}, mas recebido ${formatCurrency(amount)}.`);
       
-      // Trigger Shake
+      // Trigger Shake Animation
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 500);
     }
